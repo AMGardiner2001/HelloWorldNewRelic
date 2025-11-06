@@ -20,16 +20,11 @@ jobs:
       - name: Inject Change Marker
         env:
           NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
-          NEW_RELIC_ACCOUNT_ID: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
           NEW_RELIC_DEPLOYMENT_ENTITY_GUID: ${{ secrets.NEW_RELIC_DEPLOYMENT_ENTITY_GUID }}
         run: |
-          newrelic profile add --profile ci \
-            --apiKey $NEW_RELIC_API_KEY \
-            --accountId $NEW_RELIC_ACCOUNT_ID \
-            --region US
+          export NEW_RELIC_API_KEY=${{ secrets.NEW_RELIC_API_KEY }}
           newrelic entity deployment create \
-            --guid $NEW_RELIC_DEPLOYMENT_ENTITY_GUID \
+            --guid ${{ secrets.NEW_RELIC_DEPLOYMENT_ENTITY_GUID }} \
             --version "${{ github.sha }}" \
             --description "Auto marker from GitHub Actions" \
             --user "${{ github.actor }}"
-
