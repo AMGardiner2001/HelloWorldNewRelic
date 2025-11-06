@@ -27,7 +27,7 @@ jobs:
             --accountId $NEW_RELIC_ACCOUNT_ID \
             --region US
           newrelic entity deployment create \
-            --guid YOUR_ENTITY_GUID \
+            --guid $NEW_RELIC_DEPLOYMENT_ENTITY_GUID \
             --version "${{ github.sha }}" \
             --description "Auto marker from GitHub Actions" \
             --user "${{ github.actor }}"
