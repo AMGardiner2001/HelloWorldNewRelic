@@ -24,7 +24,8 @@ jobs:
         run: |
           newrelic profile add --profile ci \
             --apiKey $NEW_RELIC_API_KEY \
-            --accountId $NEW_RELIC_ACCOUNT_ID
+            --accountId $NEW_RELIC_ACCOUNT_ID \
+            --region US
           newrelic entity deployment create \
             --guid YOUR_ENTITY_GUID \
             --version "${{ github.sha }}" \
