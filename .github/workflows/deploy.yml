@@ -1,0 +1,32 @@
+name: Deploy Hello World
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install New Relic CLI
+        run: |
+          curl -Ls https://download.newrelic.com/install/newrelic-cli/scripts/install.sh | bash
+
+      - name: Inject Change Marker
+        env:
+          NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
+          NEW_RELIC_ACCOUNT_ID: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
+        run: |
+          newrelic profile add --profile ci \
+            --apiKey $NEW_RELIC_API_KEY \
+            --accountId $NEW_RELIC_ACCOUNT_ID
+          newrelic entity deployment create \
+            --guid YOUR_ENTITY_GUID \
+            --version "${{ github.sha }}" \
+            --description "Auto marker from GitHub Actions" \
+            --user "${{ github.actor }}"
